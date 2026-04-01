@@ -4,6 +4,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import base64
 import os
+import json
 
 load_dotenv()
 
@@ -174,31 +175,52 @@ def generate():
 
     prompt = build_prompt(category, subcategory, idea)
 
-    captions = []
+    option_prompt = prompt + """
 
-    for i in range(3):
-        option_prompt = prompt + f"\n\nGenerate exactly one single caption only for option {i + 1}. Do not label it as Option 1, Option 2, or Option 3. Do not include multiple alternatives. Stay strictly within the selected category and do not mention any other service."
+Generate exactly 3 distinct caption options.
 
-        response = client.responses.create(
-            model="gpt-4.1-mini",
-            input=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "input_text", "text": option_prompt},
-                        {
-                            "type": "input_image",
-                            "image_url": f"data:{mime_type};base64,{base64_image}"
-                        }
-                    ]
-                }
-            ]
-        )
+Return the result as valid JSON only, in this format:
 
-        captions.append(response.output_text)
+{
+  "captions": [
+    "caption option 1",
+    "caption option 2",
+    "caption option 3"
+  ]
+}
+
+Rules:
+- return only JSON
+- no markdown
+- no labels like Option 1
+- no extra commentary
+"""
+
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "input_text", "text": option_prompt},
+                    {
+                        "type": "input_image",
+                        "image_url": f"data:{mime_type};base64,{base64_image}"
+                    }
+                ]
+            }
+        ]
+    )
+
+    result_text = response.output_text.strip()
+
+    try:
+        result_json = json.loads(result_text)
+        captions = result_json.get("captions", [])
+        except json.JSONDecodeError:
+        captions = [result_text]
 
     return jsonify({"captions": captions})
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
