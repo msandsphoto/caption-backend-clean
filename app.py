@@ -177,24 +177,38 @@ def generate():
 
     option_prompt = prompt + """
 
-Generate exactly 3 distinct caption options.
+    Generate exactly 3 distinct caption options.
 
-Return the result as valid JSON only, in this format:
+    Return the result as valid JSON only, in this format:
 
-{
-  "captions": [
-    "caption option 1",
-    "caption option 2",
-    "caption option 3"
-  ]
-}
+    {
+      "captions": [
+        {
+          "hook": "short opening line",
+          "main": "main caption body",
+          "hashtags": "#tag1 #tag2 #tag3"
+        },
+        {
+          "hook": "short opening line",
+          "main": "main caption body",
+          "hashtags": "#tag1 #tag2 #tag3"
+        },
+        {
+          "hook": "short opening line",
+          "main": "main caption body",
+          "hashtags": "#tag1 #tag2 #tag3"
+        }
+      ]
+    }
 
-Rules:
-- return only JSON
-- no markdown
-- no labels like Option 1
-- no extra commentary
-"""
+    Rules:
+    - return only JSON
+    - no markdown
+    - no labels like Option 1
+    - no extra commentary
+    - each option must contain exactly these 3 keys: hook, main, hashtags
+    - hashtags must be returned as one single string
+    """
 
     response = client.responses.create(
         model="gpt-4.1-mini",
