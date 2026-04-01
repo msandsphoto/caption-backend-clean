@@ -13,28 +13,18 @@ CORS(app)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+
+def encode_image(file_storage):
+    return base64.b64encode(file_storage.read()).decode("utf-8")
+
+
 def build_prompt(category, subcategory, idea):
     if category == "fitness":
         return f"""
-        
-        Use UK English spelling and grammar throughout.
+You are a professional photographer creating Instagram captions for fitness and physique photography.
 
-Examples:
-- colour (not color)
-- behaviour (not behavior)
-- organisation (not organization)
-- centre (not center)
-- modelling (not modeling)
-- travelled (not traveled)
-
-Tone:
-- natural UK phrasing
-- not overly Americanised
-
-
-You are a professional photographer creating Instagram captions to increase the sale fitness and physique photography photoshoots.
-
-
+All output must use UK English spelling and grammar.
+Do not use American English.
 
 Create a caption based on this image.
 
@@ -42,13 +32,21 @@ Category: fitness / physique photography
 Audience focus: {subcategory}
 Extra direction: {idea if idea else "None"}
 
+Audience:
+- personal trainers
+- gyms
+- fitness brands
+- apparel companies
+- fitness professionals
+- gym enthusiasts
+
 Style:
 - confident, calm, premium
 - grounded and real
-- written from a marketing perspective focused on driving bookings from gym owners, apparel brands, fitness companies, PTs, and gym enthusiasts
-- focused on physique, visual identity, brand presence, discipline, and commercial impact
-- tailored to appeal to {subcategory}
-- positions the photographer as experienced and in control of the shoot
+- commercially aware
+- written from a marketing perspective focused on driving bookings
+- focused on physique, discipline, brand presence, visual identity, and impact
+- tailored to appeal only to the selected audience focus
 
 Goal:
 - encourage the reader to book a fitness or physique photoshoot
@@ -64,60 +62,54 @@ Avoid:
 - using the word mindset
 - sounding like a clothing brand
 - clichés or generic motivational phrases
-- only refer to the selected audience focus ({subcategory})
-- do not mention other audience types
+- mentioning audience types outside the selected audience focus
 
-Structure:
-1. Short strong hook
-2. Body focused on progress, discipline, physique, or presence
-3. Clear CTA to book a shoot
-4. 10 to 15 relevant hashtags
+Structure guidance:
+- strong short hook
+- compelling main caption body
+- relevant hashtags
 
-Keep it natural and believable.
+Keep it natural, believable, premium, and suitable for Instagram.
 Do not mention any service outside the selected category.
 """
 
     elif category == "model":
         return f"""
-        
-        Use UK English spelling and grammar throughout.
+You are a professional photographer creating Instagram captions for modelling and portfolio work.
 
-Examples:
-- colour (not color)
-- behaviour (not behavior)
-- organisation (not organization)
-- centre (not center)
-- modelling (not modeling)
-- travelled (not traveled)
-
-Tone:
-- natural UK phrasing
-- not overly Americanised
-
-You are a professional photographer creating Instagram captions to grow sales of models or general users wanting portrait shoots..
+All output must use UK English spelling and grammar.
+Do not use American English.
 
 Create a caption based on this image.
 
-Category: model / portrait photography
+Category: modelling / portrait photography
 Audience focus: {subcategory}
 Extra direction: {idea if idea else "None"}
 
+Audience:
+- fitness models
+- fashion models
+- modelling agencies
+- individuals building or updating a portfolio
+
 Style:
-- confident, calm, premium
-- grounded and real
-- written from a marketing perspective focused on driving bookings
-- focused on presence, confidence, style, energy, and visual impact
-- written from the photographer’s perspective for models, designers, and brands looking for strong editorial-style images
-- tailored to appeal to {subcategory}
-- aligned with what agencies and casting directors expect to see
+- editorial and confident
+- clean and premium
+- not overly sales-focused
+- focused on image quality, physique, presence, confidence, and visual impact
+- written from the photographer’s perspective
+- tailored only to the selected audience focus
 
 Goal:
-- encourage the reader to book a model, portrait, editorial, or portfolio photoshoot
+- showcase presence, confidence, physique, and aesthetic
+- attract agency attention or portfolio bookings
+- position the subject as credible and commercially usable
+- encourage a booking for a model, portrait, portfolio, or agency-standard shoot
 
 CTA:
 - clear and direct
 - encourage DM or enquiry
-- focused only on booking a model, portrait, editorial, or portfolio shoot
+- focused only on booking a model or portfolio shoot
 
 Avoid:
 - mentioning the mindset workshop
@@ -125,43 +117,28 @@ Avoid:
 - using the word mindset
 - sounding like a clothing brand
 - clichés or generic motivational phrases
-- only refer to the selected audience focus ({subcategory})
-- do not mention other audience types
+- mentioning audience types outside the selected audience focus
 
-Structure:
-1. Short strong hook
-2. Body focused on confidence, presence, editorial feel, style, or energy in the image
-3. Clear CTA to book a shoot
-4. 10 to 15 relevant hashtags
+Structure guidance:
+- strong short hook
+- compelling main caption body
+- relevant hashtags
 
 Hashtag guidance:
-- include a mix of:
-  - niche hashtags (modeldigitals, portfolioshoot)
-  - broader hashtags (portraitphotography)
-  - branded hashtag (#MSandsPhotography)
+- use a mix of niche and broader tags
+- always keep them suitable for the selected audience focus
+- include #MSandsPhotography where appropriate
 
-Keep it natural and believable.
+Keep it natural, believable, premium, and suitable for Instagram and portfolio-led content.
 Do not mention any service outside the selected category.
 """
 
     else:
         return f"""
-        
-        Use UK English spelling and grammar throughout.
+You are promoting a Mindset Photography Workshop.
 
-Examples:
-- colour (not color)
-- behaviour (not behavior)
-- organisation (not organization)
-- centre (not center)
-- modelling (not modeling)
-- travelled (not traveled)
-
-Tone:
-- natural UK phrasing
-- not overly Americanised
-
-You are promoting your Mindset Photography Workshop.
+All output must use UK English spelling and grammar.
+Do not use American English.
 
 Create a caption based on this image.
 
@@ -169,13 +146,17 @@ Category: mindset photography workshop
 Audience focus: {subcategory}
 Extra direction: {idea if idea else "None"}
 
+Audience:
+- people experiencing stress or overwhelm
+- people wanting calm and reset
+- people interested in mindfulness, wellbeing, yoga, and creative reflection
+
 Style:
 - calm, reflective, premium
 - grounded and real
 - focused on slowing down, noticing more, and feeling present
 - written from a marketing perspective focused on driving workshop enquiries
-- aimed at people interested in mindfulness, yoga, wellbeing, and creative ways to manage stress or anxiety
-- tailored to people experiencing {subcategory}
+- tailored only to the selected audience focus
 
 Goal:
 - encourage the reader to enquire about or book the mindset photography workshop
@@ -183,26 +164,27 @@ Goal:
 CTA:
 - clear and direct
 - encourage DM or enquiry
-- focused only on the mindset workshop
+- focused only on the workshop
 
 Avoid:
 - promoting photoshoots
 - generic motivational phrases
 - clichés
+- mentioning services outside the selected category
 
-Structure:
-1. Short strong hook
-2. Body focused on calm, awareness, creativity, or presence
-3. Clear CTA for the workshop
-4. 10 to 15 relevant hashtags
+Structure guidance:
+- strong short hook
+- compelling main caption body
+- relevant hashtags
 
-Keep it natural and believable.
+Keep it natural, believable, calm, and suitable for Instagram.
 Do not mention any service outside the selected category.
 """
 
 
-def encode_image(file_storage):
-    return base64.b64encode(file_storage.read()).decode("utf-8")
+@app.route("/", methods=["GET"])
+def home():
+    return "Caption backend is running"
 
 
 @app.route("/generate", methods=["POST"])
@@ -225,38 +207,39 @@ def generate():
 
     option_prompt = prompt + """
 
-    Generate exactly 3 distinct caption options.
+Generate exactly 3 distinct caption options.
 
-    Return the result as valid JSON only, in this format:
+Return the result as valid JSON only, in this format:
 
+{
+  "captions": [
     {
-      "captions": [
-        {
-          "hook": "short opening line",
-          "main": "main caption body",
-          "hashtags": "#tag1 #tag2 #tag3"
-        },
-        {
-          "hook": "short opening line",
-          "main": "main caption body",
-          "hashtags": "#tag1 #tag2 #tag3"
-        },
-        {
-          "hook": "short opening line",
-          "main": "main caption body",
-          "hashtags": "#tag1 #tag2 #tag3"
-        }
-      ]
+      "hook": "short opening line",
+      "main": "main caption body",
+      "hashtags": "#tag1 #tag2 #tag3"
+    },
+    {
+      "hook": "short opening line",
+      "main": "main caption body",
+      "hashtags": "#tag1 #tag2 #tag3"
+    },
+    {
+      "hook": "short opening line",
+      "main": "main caption body",
+      "hashtags": "#tag1 #tag2 #tag3"
     }
+  ]
+}
 
-    Rules:
-    - return only JSON
-    - no markdown
-    - no labels like Option 1
-    - no extra commentary
-    - each option must contain exactly these 3 keys: hook, main, hashtags
-    - hashtags must be returned as one single string
-    """
+Rules:
+- return only JSON
+- no markdown
+- no labels like Option 1
+- no extra commentary
+- each option must contain exactly these 3 keys: hook, main, hashtags
+- hashtags must be returned as one single string
+- each option must be clearly different in wording and angle
+"""
 
     response = client.responses.create(
         model="gpt-4.1-mini",
@@ -289,6 +272,7 @@ def generate():
         ]
 
     return jsonify({"captions": captions})
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
