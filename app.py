@@ -18,6 +18,20 @@ def build_prompt(category, subcategory, idea):
         return f"""
 You are a professional photographer creating Instagram captions for your fitness and physique photography work.
 
+Use UK English spelling and grammar throughout.
+
+Examples:
+- colour (not color)
+- behaviour (not behavior)
+- organisation (not organization)
+- centre (not center)
+- modelling (not modeling)
+- travelled (not traveled)
+
+Tone:
+- natural UK phrasing
+- not overly Americanised
+
 Create a caption based on this image.
 
 Category: fitness / physique photography
