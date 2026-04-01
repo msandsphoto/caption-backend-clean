@@ -217,7 +217,7 @@ Rules:
     try:
         result_json = json.loads(result_text)
         captions = result_json.get("captions", [])
-        except json.JSONDecodeError:
+    except json.JSONDecodeError:
         captions = [result_text]
 
     return jsonify({"captions": captions})
