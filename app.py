@@ -16,9 +16,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def build_prompt(category, subcategory, idea):
     if category == "fitness":
         return f"""
-You are a professional photographer creating Instagram captions for your fitness and physique photography work.
-
-Use UK English spelling and grammar throughout.
+        
+        Use UK English spelling and grammar throughout.
 
 Examples:
 - colour (not color)
@@ -31,6 +30,11 @@ Examples:
 Tone:
 - natural UK phrasing
 - not overly Americanised
+
+
+You are a professional photographer creating Instagram captions to increase the sale fitness and physique photography photoshoots.
+
+
 
 Create a caption based on this image.
 
@@ -75,7 +79,22 @@ Do not mention any service outside the selected category.
 
     elif category == "model":
         return f"""
-You are a professional photographer creating Instagram captions for your model and portrait photography work.
+        
+        Use UK English spelling and grammar throughout.
+
+Examples:
+- colour (not color)
+- behaviour (not behavior)
+- organisation (not organization)
+- centre (not center)
+- modelling (not modeling)
+- travelled (not traveled)
+
+Tone:
+- natural UK phrasing
+- not overly Americanised
+
+You are a professional photographer creating Instagram captions to grow sales of models or general users wanting portrait shoots..
 
 Create a caption based on this image.
 
@@ -127,6 +146,21 @@ Do not mention any service outside the selected category.
 
     else:
         return f"""
+        
+        Use UK English spelling and grammar throughout.
+
+Examples:
+- colour (not color)
+- behaviour (not behavior)
+- organisation (not organization)
+- centre (not center)
+- modelling (not modeling)
+- travelled (not traveled)
+
+Tone:
+- natural UK phrasing
+- not overly Americanised
+
 You are promoting your Mindset Photography Workshop.
 
 Create a caption based on this image.
