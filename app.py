@@ -232,7 +232,13 @@ def generate():
         result_json = json.loads(result_text)
         captions = result_json.get("captions", [])
     except json.JSONDecodeError:
-        captions = [result_text]
+        captions = [
+            {
+                "hook": "",
+                "main": result_text,
+                "hashtags": ""
+            }
+        ]
 
     return jsonify({"captions": captions})
 
