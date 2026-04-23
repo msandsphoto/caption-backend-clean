@@ -105,6 +105,7 @@ Structure guidance:
 - relevant hashtags
 - keep sentences short and punchy
 - prefer short statements over long paragraphs
+- include at least one specific visual detail from the image (e.g. lighting, colour, expression, styling)
 
 Hashtag guidance:
 - use a mix of niche and broader tags
@@ -199,6 +200,7 @@ Structure guidance:
 - prefer short statements over long paragraphs
 - let the image lead the caption
 - make at least one detail feel specific to the photo
+- include at least one specific visual detail from the image (e.g. lighting, colour, expression, styling)
 
 Hashtag guidance:
 - use a mix of niche and broader tags
@@ -283,6 +285,7 @@ Structure guidance:
 - relevant hashtags
 - keep sentences short and punchy
 - prefer short statements over long paragraphs
+- include at least one specific visual detail from the image (e.g. lighting, colour, expression, styling)
 
 Hashtag guidance:
 - use a mix of niche and broader tags
