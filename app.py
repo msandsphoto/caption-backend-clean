@@ -33,6 +33,9 @@ Write in a clean, direct style.
 Avoid over-describing or sounding poetic.
 Keep language simple, confident, and natural.
 Prefer short, punchy sentences. Say less, mean more.
+Write like a real photographer, not a marketing agency.
+Keep it understated, specific, and believable.
+Do not default to sales language unless the image genuinely supports it.
 
 Create a caption based on this image.
 
@@ -133,11 +136,12 @@ Selected tone: {selected_tone}
 Selected caption goal: {selected_goal}
 
 Brand voice:
-- default style is editorial, confident, and premium
-- clean, understated, visually intelligent
-- poised and credible, never try-hard
+- default style is understated, confident, and premium
+- calm, observant, and visually aware
+- clean, direct, and believable
 - written from the photographer’s perspective
-- commercially aware without sounding sales-heavy
+- grounded, not hyped
+- specific rather than generic
 - adjust the wording to reflect the selected tone while staying on-brand
 - avoid trying to sound impressive; keep it natural and direct
 
@@ -153,20 +157,21 @@ Do not mention or imply other audience types.
 Goals:
 - selected caption goal: {selected_goal}
 - if the goal is engagement, prioritise conversation and comments
-- if the goal is authority, position the photographer and subject as credible and high-level
-- if the goal is bookings, encourage an enquiry or booking naturally
-- if the goal is storytelling, make the caption feel more personal and narrative-led
-- if the goal is brand awareness, emphasise image, consistency, and recognisable visual identity
-- showcase presence, confidence, physique, style, or versatility as appropriate to the image
-- position the subject as credible, bookable, and visually strong
-- support agency, portfolio, editorial, or personal branding appeal
-- encourage an enquiry or booking for a model, portrait, portfolio, or agency-standard shoot
+- if the goal is authority, position the photographer and subject as credible and visually strong
+- if the goal is bookings, encourage an enquiry or booking only in a subtle, natural way
+- if the goal is storytelling, make the caption feel personal, specific, and image-led
+- if the goal is brand awareness, emphasise consistency, identity, and recognisable style
+- respond to the actual image, not a generic model brief
+- highlight mood, styling, expression, attitude, colour, light, or presence as appropriate
+- keep the caption grounded in what is visible in the image
+- avoid assuming this is for an agency, portfolio update, or career pitch unless the image clearly supports that
 
 CTA guidance:
 - keep it natural and appropriate for social media
-- use a soft or subtle invitation where it fits
-- do not be overly salesy
-- focus only on booking a model or portfolio shoot
+- a CTA is optional, not required
+- if used, keep it soft and brief
+- do not force a booking angle if the image feels more editorial or observational
+- never sound like an advert
 
 Avoid:
 - mentioning the mindset workshop
@@ -181,6 +186,10 @@ Avoid:
 - dramatic or exaggerated wording
 - long, complex sentences
 - starting captions with generic phrases like "this image", "this shot", or "this moment"
+- generic portfolio language
+- agency or career talk unless clearly relevant
+- empty power words like "impact", "elevate", or "command" unless truly earned
+- phrases like "own your story", "command the frame", or "your look demands"
 
 Structure guidance:
 - strong short hook
@@ -188,6 +197,8 @@ Structure guidance:
 - relevant hashtags
 - keep sentences short and punchy
 - prefer short statements over long paragraphs
+- let the image lead the caption
+- make at least one detail feel specific to the photo
 
 Hashtag guidance:
 - use a mix of niche and broader tags
@@ -348,6 +359,8 @@ Rules:
 - hooks should be short (ideally under 8 words)
 - avoid opening with generic phrases like "this image", "this shot", or "this moment"
 - prefer a statement, observation, or point of view over scene-setting
+- for model captions, avoid generic portfolio or agency language unless clearly supported by the image
+- make at least one line feel specific to the uploaded photo rather than interchangeable
 """
 
     response = client.responses.create(
