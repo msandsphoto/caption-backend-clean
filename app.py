@@ -32,6 +32,7 @@ Do not use American English.
 Write in a clean, direct style.
 Avoid over-describing or sounding poetic.
 Keep language simple, confident, and natural.
+Prefer short, punchy sentences. Say less, mean more.
 
 Create a caption based on this image.
 
@@ -49,6 +50,7 @@ Brand voice:
 - emotionally intelligent, not cheesy
 - written like an experienced photographer and marketer
 - adjust the wording to reflect the selected tone while staying on-brand
+- avoid trying to sound impressive; keep it natural and direct
 
 Audience:
 - personal trainers
@@ -89,11 +91,17 @@ Avoid:
 - overused fitness clichés
 - mentioning audience types outside the selected audience focus
 - emojis unless they are genuinely essential
+- overly flowery or poetic phrasing
+- dramatic or exaggerated wording
+- long, complex sentences
+- starting captions with generic phrases like "this image", "this shot", or "this moment"
 
 Structure guidance:
 - strong short hook
 - compelling main caption body
 - relevant hashtags
+- keep sentences short and punchy
+- prefer short statements over long paragraphs
 
 Hashtag guidance:
 - use a mix of niche and broader tags
@@ -114,6 +122,7 @@ Do not use American English.
 Write in a clean, direct style.
 Avoid over-describing or sounding poetic.
 Keep language simple, confident, and natural.
+Prefer short, punchy sentences. Say less, mean more.
 
 Create a caption based on this image.
 
@@ -130,6 +139,7 @@ Brand voice:
 - written from the photographer’s perspective
 - commercially aware without sounding sales-heavy
 - adjust the wording to reflect the selected tone while staying on-brand
+- avoid trying to sound impressive; keep it natural and direct
 
 Audience:
 - fitness models
@@ -167,11 +177,17 @@ Avoid:
 - empty hype
 - mentioning audience types outside the selected audience focus
 - emojis unless they are genuinely essential
+- overly flowery or poetic phrasing
+- dramatic or exaggerated wording
+- long, complex sentences
+- starting captions with generic phrases like "this image", "this shot", or "this moment"
 
 Structure guidance:
 - strong short hook
 - compelling main caption body
 - relevant hashtags
+- keep sentences short and punchy
+- prefer short statements over long paragraphs
 
 Hashtag guidance:
 - use a mix of niche and broader tags
@@ -192,6 +208,7 @@ Do not use American English.
 Write in a clean, direct style.
 Avoid over-describing or sounding poetic.
 Keep language simple, confident, and natural.
+Prefer short, punchy sentences. Say less, mean more.
 
 Create a caption based on this image.
 
@@ -208,6 +225,7 @@ Brand voice:
 - emotionally intelligent, never clinical
 - written like a thoughtful workshop facilitator with a marketing eye
 - adjust the wording to reflect the selected tone while staying on-brand
+- avoid trying to sound impressive; keep it natural and direct
 
 Audience:
 - people experiencing stress or overwhelm
@@ -243,11 +261,17 @@ Avoid:
 - sounding clinical or preachy
 - mentioning services outside the selected category
 - emojis unless they are genuinely essential
+- overly flowery or poetic phrasing
+- dramatic or exaggerated wording
+- long, complex sentences
+- starting captions with generic phrases like "this image", "this shot", or "this moment"
 
 Structure guidance:
 - strong short hook
 - compelling main caption body
 - relevant hashtags
+- keep sentences short and punchy
+- prefer short statements over long paragraphs
 
 Hashtag guidance:
 - use a mix of niche and broader tags
@@ -321,6 +345,9 @@ Rules:
 - each option must be clearly different in wording and angle
 - reflect the selected tone consistently
 - reflect the selected caption goal clearly but naturally
+- hooks should be short (ideally under 8 words)
+- avoid opening with generic phrases like "this image", "this shot", or "this moment"
+- prefer a statement, observation, or point of view over scene-setting
 """
 
     response = client.responses.create(
