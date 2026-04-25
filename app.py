@@ -529,6 +529,22 @@ def generate_from_path():
 
     return jsonify({"captions": captions})
 
+@app.route("/preview")
+def preview():
+    image_path = request.args.get("path")
+
+    if not image_path or not os.path.exists(image_path):
+        return "Image not found", 400
+
+    return f"""
+    <html>
+    <body style="font-family: Arial; text-align: center;">
+        <h2>Caption Generator</h2>
+        <img src="file://{image_path}" style="max-width: 600px; border-radius: 8px;" />
+        <p>Now go to your Caption Generator and upload this image if needed.</p>
+    </body>
+    </html>
+    """
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
