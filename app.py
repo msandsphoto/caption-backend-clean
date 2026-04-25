@@ -415,6 +415,121 @@ Rules:
     return jsonify({"captions": captions})
 
 
+# Helper function and new route for generating from image path
+def build_option_prompt(prompt):
+    return prompt + """
+
+Generate exactly 3 distinct caption options.
+
+Return the result as valid JSON only, in this format:
+
+{
+  "captions": [
+    {
+      "hook": "short opening line",
+      "main": "main caption body",
+      "hashtags": "#tag1 #tag2 #tag3"
+    },
+    {
+      "hook": "short opening line",
+      "main": "main caption body",
+      "hashtags": "#tag1 #tag2 #tag3"
+    },
+    {
+      "hook": "short opening line",
+      "main": "main caption body",
+      "hashtags": "#tag1 #tag2 #tag3"
+    }
+  ]
+}
+
+Rules:
+- return only JSON
+- no markdown
+- no labels like Option 1
+- no extra commentary
+- each option must contain exactly these 3 keys: hook, main, hashtags
+- hashtags must be returned as one single string
+- each option must be clearly different in wording and angle
+- reflect the selected tone consistently
+- reflect the selected caption goal clearly but naturally
+- hooks should be short (ideally under 8 words)
+- avoid opening with generic phrases like "this image", "this shot", or "this moment"
+- prefer a statement, observation, or point of view over scene-setting
+- for model captions, avoid generic portfolio or agency language unless clearly supported by the image
+- make at least one line feel specific to the uploaded photo rather than interchangeable
+"""
+
+
+@app.route("/generate-from-path", methods=["POST"])
+def generate_from_path():
+    data = request.get_json(silent=True) or {}
+
+    image_path = data.get("image_path", "")
+    category = data.get("category", "model").strip().lower()
+    subcategory = data.get("subcategory", "").strip()
+    idea = data.get("idea", "").strip()
+    tone = data.get("tone", "premium").strip().lower()
+    goal = data.get("goal", "bookings").strip().lower()
+
+    if not image_path:
+        return jsonify({"error": "No image path provided"}), 400
+
+    if not os.path.exists(image_path):
+        return jsonify({"error": "Image path does not exist"}), 400
+
+    if category not in ["fitness", "model", "mindset"]:
+        return jsonify({"error": "Invalid category"}), 400
+
+    image_extension = os.path.splitext(image_path)[1].lower()
+    if image_extension in [".jpg", ".jpeg"]:
+        mime_type = "image/jpeg"
+    elif image_extension == ".png":
+        mime_type = "image/png"
+    elif image_extension == ".webp":
+        mime_type = "image/webp"
+    else:
+        return jsonify({"error": "Unsupported image type. Use JPG, PNG, or WEBP."}), 400
+
+    with open(image_path, "rb") as image_file:
+        base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+
+    prompt = build_prompt(category, subcategory, idea, tone, goal)
+    option_prompt = build_option_prompt(prompt)
+
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=[
+            {
+                "role": "user",
+                "content": [
+                    {"type": "input_text", "text": option_prompt},
+                    {
+                        "type": "input_image",
+                        "image_url": f"data:{mime_type};base64,{base64_image}"
+                    }
+                ]
+            }
+        ]
+    )
+
+    result_text = response.output_text.strip()
+
+    try:
+        result_json = json.loads(result_text)
+        captions = result_json.get("captions", [])
+    except json.JSONDecodeError:
+        captions = [
+            {
+                "hook": "",
+                "main": result_text,
+                "hashtags": ""
+            }
+        ]
+
+    return jsonify({"captions": captions})
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port)
