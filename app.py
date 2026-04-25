@@ -549,42 +549,194 @@ def preview():
 
     return f"""
     <html>
-    <body style="font-family: Arial; text-align: center; max-width: 700px; margin: auto;">
-        <h2>Caption Generator</h2>
-        <img src="/image?path={image_path}" style="max-width: 100%; border-radius: 8px;" />
+    <head>
+        <title>AI Caption Creator</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                background: #f7f5ef;
+                color: #2e2e2e;
+                margin: 0;
+                padding: 40px 20px;
+            }}
+            .card {{
+                max-width: 760px;
+                margin: 0 auto;
+                background: #ffffff;
+                border-radius: 18px;
+                padding: 34px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            }}
+            h1 {{
+                font-size: 42px;
+                margin: 0 0 24px;
+                letter-spacing: -1px;
+            }}
+            .image-preview {{
+                width: 180px;
+                height: 180px;
+                object-fit: cover;
+                border-radius: 14px;
+                display: block;
+                margin-bottom: 26px;
+                border: 1px solid #ddd;
+            }}
+            label {{
+                display: block;
+                font-size: 20px;
+                color: #5b6b82;
+                margin: 22px 0 8px;
+            }}
+            select, textarea {{
+                width: 100%;
+                font-size: 20px;
+                padding: 14px;
+                border-radius: 10px;
+                border: 1px solid #ddd;
+                background: #f1f1f1;
+                box-sizing: border-box;
+            }}
+            textarea {{
+                min-height: 90px;
+                resize: vertical;
+            }}
+            button {{
+                margin-top: 26px;
+                width: 100%;
+                padding: 16px;
+                font-size: 20px;
+                border: none;
+                border-radius: 12px;
+                background: #2e2e2e;
+                color: #ffffff;
+                cursor: pointer;
+            }}
+            .caption-card {{
+                margin-top: 22px;
+                padding: 18px;
+                border-radius: 12px;
+                background: #f7f5ef;
+                text-align: left;
+                white-space: pre-wrap;
+            }}
+            .caption-card h3 {{
+                margin: 0 0 8px;
+            }}
+            .copy-button {{
+                margin-top: 12px;
+                width: auto;
+                padding: 10px 14px;
+                font-size: 14px;
+                border-radius: 8px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>AI Caption Creator</h1>
 
-        <form id="captionForm" style="margin-top: 20px;">
-            <label>Category:</label><br>
-            <select id="category">
-                <option value="model">Model</option>
+            <label>Exported image</label>
+            <img class="image-preview" src="/image?path={image_path}" />
+
+            <label>Category</label>
+            <select id="category" onchange="updateAudienceOptions()">
                 <option value="fitness">Fitness</option>
+                <option value="model">Model / Portrait</option>
                 <option value="mindset">Mindset</option>
-            </select><br><br>
+            </select>
 
-            <label>Subcategory:</label><br>
-            <input type="text" id="subcategory" placeholder="e.g. editorial"><br><br>
+            <label>Audience focus</label>
+            <select id="subcategory"></select>
 
-            <label>Tone:</label><br>
+            <label>Tone</label>
             <select id="tone">
                 <option value="premium">Premium</option>
                 <option value="direct">Direct</option>
                 <option value="editorial">Editorial</option>
-            </select><br><br>
+                <option value="commercial">Commercial</option>
+                <option value="soft">Soft</option>
+            </select>
 
-            <label>Goal:</label><br>
+            <label>Caption goal</label>
             <select id="goal">
                 <option value="bookings">Bookings</option>
                 <option value="engagement">Engagement</option>
                 <option value="authority">Authority</option>
-            </select><br><br>
+                <option value="storytelling">Storytelling</option>
+                <option value="brand awareness">Brand awareness</option>
+            </select>
+
+            <label>Extra direction (optional)</label>
+            <textarea id="idea" placeholder="e.g. stripped back, commercial, no hard sell"></textarea>
 
             <button type="button" onclick="generateCaption()">Generate Caption</button>
-        </form>
 
-        <pre id="output" style="text-align:left; margin-top:20px; white-space:pre-wrap;"></pre>
+            <div id="output"></div>
+        </div>
 
         <script>
+        const audienceOptions = {{
+            fitness: [
+                'PTs',
+                'Fitness brands / apparel',
+                'Gyms / fitness businesses',
+                'Athletes / transformation',
+                'Fitness professionals',
+                'Gym enthusiasts'
+            ],
+            model: [
+                'Editorial',
+                'Portfolio',
+                'Fashion model',
+                'Fitness model',
+                'Commercial / brand',
+                'Portrait'
+            ],
+            mindset: [
+                'Individuals',
+                'Groups',
+                'Corporate wellness',
+                'Stress / overwhelm',
+                'Mindfulness / wellbeing',
+                'Creative reflection'
+            ]
+        }};
+
+        function updateAudienceOptions() {{
+            const category = document.getElementById('category').value;
+            const subcategory = document.getElementById('subcategory');
+            subcategory.innerHTML = '';
+
+            audienceOptions[category].forEach(optionText => {{
+                const option = document.createElement('option');
+                option.value = optionText;
+                option.textContent = optionText;
+                subcategory.appendChild(option);
+            }});
+        }}
+
+        function formatCaption(option, index) {{
+            const fullCaption = `${{option.hook}}\n\n${{option.main}}\n\n${{option.hashtags}}`;
+            return `
+                <div class="caption-card">
+                    <h3>Option ${{index + 1}}</h3>
+                    <div>${{fullCaption}}</div>
+                    <button class="copy-button" onclick="copyCaption(${{index}})">Copy caption</button>
+                </div>
+            `;
+        }}
+
+        let latestCaptions = [];
+
+        function copyCaption(index) {{
+            const option = latestCaptions[index];
+            const fullCaption = `${{option.hook}}\n\n${{option.main}}\n\n${{option.hashtags}}`;
+            navigator.clipboard.writeText(fullCaption);
+        }}
+
         function generateCaption() {{
+            document.getElementById('output').innerHTML = '<div class="caption-card">Generating captions...</div>';
+
             fetch('/generate-from-path', {{
                 method: 'POST',
                 headers: {{ 'Content-Type': 'application/json' }},
@@ -593,16 +745,19 @@ def preview():
                     category: document.getElementById('category').value,
                     subcategory: document.getElementById('subcategory').value,
                     tone: document.getElementById('tone').value,
-                    goal: document.getElementById('goal').value
+                    goal: document.getElementById('goal').value,
+                    idea: document.getElementById('idea').value
                 }})
             }})
             .then(res => res.json())
             .then(data => {{
-                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+                latestCaptions = data.captions || [];
+                document.getElementById('output').innerHTML = latestCaptions.map(formatCaption).join('');
             }});
         }}
-        </script>
 
+        updateAudienceOptions();
+        </script>
     </body>
     </html>
     """
