@@ -53,7 +53,7 @@ Brand voice:
 - emotionally intelligent, not cheesy
 - written like an experienced photographer and marketer
 - adjust the wording to reflect the selected tone while staying on-brand
-- avoid trying to sound impressive; keep it natural and direct
+- avoid trying to sound impressive, keep it natural and direct
 - write like a working UK photographer posting on Instagram
 - captions should feel written in the moment, not carefully constructed
 - avoid sounding polished or overly considered
