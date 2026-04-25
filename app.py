@@ -54,6 +54,12 @@ Brand voice:
 - written like an experienced photographer and marketer
 - adjust the wording to reflect the selected tone while staying on-brand
 - avoid trying to sound impressive; keep it natural and direct
+- write like a working UK photographer posting on Instagram
+- captions should feel written in the moment, not carefully constructed
+- avoid sounding polished or overly considered
+- use natural phrasing
+- it’s fine if sentences are slightly imperfect
+- short is better than complete
 
 Audience:
 - personal trainers
@@ -83,6 +89,8 @@ CTA guidance:
 - use a soft or subtle invitation where it fits
 - do not be overly salesy or pushy
 - focus only on booking a fitness or physique shoot
+- only include a CTA if it feels completely natural for the image
+- it is better to have no CTA than a forced one
 
 Avoid:
 - mentioning the mindset workshop
@@ -145,6 +153,12 @@ Brand voice:
 - specific rather than generic
 - adjust the wording to reflect the selected tone while staying on-brand
 - avoid trying to sound impressive; keep it natural and direct
+- write like a working UK photographer posting on Instagram
+- captions should feel written in the moment, not carefully constructed
+- avoid sounding polished or overly considered
+- use natural phrasing
+- it’s fine if sentences are slightly imperfect
+- short is better than complete
 
 Audience:
 - fitness models
@@ -173,6 +187,8 @@ CTA guidance:
 - if used, keep it soft and brief
 - do not force a booking angle if the image feels more editorial or observational
 - never sound like an advert
+- only include a CTA if it feels completely natural for the image
+- it is better to have no CTA than a forced one
 
 Avoid:
 - mentioning the mindset workshop
@@ -400,5 +416,5 @@ Rules:
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port)
