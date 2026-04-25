@@ -715,30 +715,30 @@ def preview():
             }});
         }}
 
-        function formatCaption(option, index) {
-            const fullCaption = `${option.hook}\n\n${option.main}\n\n${option.hashtags}`;
+        function formatCaption(option, index) {{
+            const fullCaption = `${{option.hook}}\n\n${{option.main}}\n\n${{option.hashtags}}`;
             return `
                 <div class="caption-card">
-                    <h3>Option ${index + 1}</h3>
-                    <div>${fullCaption}</div>
-                    <button id="copyButton${index}" class="copy-button" onclick="copyCaption(${index})">Copy caption</button>
+                    <h3>Option ${{index + 1}}</h3>
+                    <div>${{fullCaption}}</div>
+                    <button id="copyButton${{index}}" class="copy-button" onclick="copyCaption(${{index}})">Copy caption</button>
                 </div>
             `;
-        }
+        }}
 
         let latestCaptions = [];
 
-        function copyCaption(index) {
+        function copyCaption(index) {{
             const option = latestCaptions[index];
-            const fullCaption = `${option.hook}\n\n${option.main}\n\n${option.hashtags}`;
-            navigator.clipboard.writeText(fullCaption).then(() => {
-                const button = document.getElementById(`copyButton${index}`);
+            const fullCaption = `${{option.hook}}\n\n${{option.main}}\n\n${{option.hashtags}}`;
+            navigator.clipboard.writeText(fullCaption).then(() => {{
+                const button = document.getElementById(`copyButton${{index}}`);
                 button.textContent = 'Copied';
-                setTimeout(() => {
+                setTimeout(() => {{
                     button.textContent = 'Copy caption';
-                }, 2000);
-            });
-        }
+                }}, 2000);
+            }});
+        }}
 
         function generateCaption() {{
             document.getElementById('output').innerHTML = '<div class="caption-card">Generating captions...</div>';
