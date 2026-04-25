@@ -719,13 +719,13 @@ def preview():
             const hook = option.hook || '';
             const main = option.main || '';
             const hashtags = option.hashtags || '';
-            const fullCaption = `${hook}\n\n${main}\n\n${hashtags}`.trim();
+            const fullCaption = `${{hook}}\n\n${{main}}\n\n${{hashtags}}`.trim();
 
             return `
                 <div class="caption-card">
-                    <h3>Option ${index + 1}</h3>
-                    <div>${fullCaption}</div>
-                    <button type="button" id="copyButton${index}" class="copy-button" onclick="copyCaption(${index})">Copy caption</button>
+                    <h3>Option ${{index + 1}}</h3>
+                    <div>${{fullCaption}}</div>
+                    <button type="button" id="copyButton${{index}}" class="copy-button" onclick="copyCaption(${{index}})">Copy caption</button>
                 </div>
             `;
         }}
@@ -737,10 +737,10 @@ def preview():
             const hook = option.hook || '';
             const main = option.main || '';
             const hashtags = option.hashtags || '';
-            const fullCaption = `${hook}\n\n${main}\n\n${hashtags}`.trim();
+            const fullCaption = `${{hook}}\n\n${{main}}\n\n${{hashtags}}`.trim();
 
             navigator.clipboard.writeText(fullCaption).then(() => {{
-                const button = document.getElementById(`copyButton${index}`);
+                const button = document.getElementById(`copyButton${{index}}`);
                 if (button) {{
                     button.textContent = 'Copied';
                     setTimeout(() => {{
