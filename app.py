@@ -768,11 +768,11 @@ def preview():
             .then(res => res.json())
             .then(data => {{
                 latestCaptions = data.captions || [];
-                if (latestCaptions.length === 0) {
+                if (latestCaptions.length === 0) {{
                     document.getElementById('output').innerHTML = '<div class="caption-card">No captions were returned. Try generating again.</div>';
-                } else {
+                }} else {{
                     document.getElementById('output').innerHTML = latestCaptions.map(formatCaption).join('');
-                }
+                }}
             }});
         }}
 
