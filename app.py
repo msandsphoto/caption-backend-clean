@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -529,6 +529,17 @@ def generate_from_path():
 
     return jsonify({"captions": captions})
 
+
+@app.route("/image")
+def get_image():
+    image_path = request.args.get("path")
+
+    if not image_path or not os.path.exists(image_path):
+        return "Image not found", 400
+
+    return send_file(image_path)
+
+
 @app.route("/preview")
 def preview():
     image_path = request.args.get("path")
@@ -538,10 +549,60 @@ def preview():
 
     return f"""
     <html>
-    <body style="font-family: Arial; text-align: center;">
+    <body style="font-family: Arial; text-align: center; max-width: 700px; margin: auto;">
         <h2>Caption Generator</h2>
-        <img src="file://{image_path}" style="max-width: 600px; border-radius: 8px;" />
-        <p>Now go to your Caption Generator and upload this image if needed.</p>
+        <img src="/image?path={image_path}" style="max-width: 100%; border-radius: 8px;" />
+
+        <form id="captionForm" style="margin-top: 20px;">
+            <label>Category:</label><br>
+            <select id="category">
+                <option value="model">Model</option>
+                <option value="fitness">Fitness</option>
+                <option value="mindset">Mindset</option>
+            </select><br><br>
+
+            <label>Subcategory:</label><br>
+            <input type="text" id="subcategory" placeholder="e.g. editorial"><br><br>
+
+            <label>Tone:</label><br>
+            <select id="tone">
+                <option value="premium">Premium</option>
+                <option value="direct">Direct</option>
+                <option value="editorial">Editorial</option>
+            </select><br><br>
+
+            <label>Goal:</label><br>
+            <select id="goal">
+                <option value="bookings">Bookings</option>
+                <option value="engagement">Engagement</option>
+                <option value="authority">Authority</option>
+            </select><br><br>
+
+            <button type="button" onclick="generateCaption()">Generate Caption</button>
+        </form>
+
+        <pre id="output" style="text-align:left; margin-top:20px; white-space:pre-wrap;"></pre>
+
+        <script>
+        function generateCaption() {{
+            fetch('/generate-from-path', {{
+                method: 'POST',
+                headers: {{ 'Content-Type': 'application/json' }},
+                body: JSON.stringify({{
+                    image_path: "{image_path}",
+                    category: document.getElementById('category').value,
+                    subcategory: document.getElementById('subcategory').value,
+                    tone: document.getElementById('tone').value,
+                    goal: document.getElementById('goal').value
+                }})
+            }})
+            .then(res => res.json())
+            .then(data => {{
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            }});
+        }}
+        </script>
+
     </body>
     </html>
     """
