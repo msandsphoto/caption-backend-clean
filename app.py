@@ -6,6 +6,7 @@ import base64
 import os
 import json
 import uuid
+import urllib.request
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -345,12 +346,12 @@ def generate():
         base64_image = encode_image(image)
     else:
         try:
-            image_response = client._client.get(image_url)
-            image_response.raise_for_status()
-            mime_type = image_response.headers.get("Content-Type", "image/jpeg")
-            base64_image = base64.b64encode(image_response.content).decode("utf-8")
-        except Exception:
-            return jsonify({"error": "Could not retrieve image from image_url"}), 400
+            with urllib.request.urlopen(image_url, timeout=20) as image_response:
+                mime_type = image_response.headers.get("Content-Type", "image/jpeg")
+                image_bytes = image_response.read()
+                base64_image = base64.b64encode(image_bytes).decode("utf-8")
+        except Exception as e:
+            return jsonify({"error": f"Could not retrieve image from image_url: {str(e)}"}), 400
 
     prompt = build_prompt(category, subcategory, idea, tone, goal)
 
