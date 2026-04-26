@@ -421,21 +421,24 @@ Rules:
 - make at least one line feel specific to the uploaded photo rather than interchangeable
 """
 
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=[
-            {
-                "role": "user",
-                "content": [
-                    {"type": "input_text", "text": option_prompt},
-                    {
-                        "type": "input_image",
-                        "image_url": f"data:{mime_type};base64,{base64_image}"
-                    }
-                ]
-            }
-        ]
-    )
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "input_text", "text": option_prompt},
+                        {
+                            "type": "input_image",
+                            "image_url": f"data:{mime_type};base64,{base64_image}"
+                        }
+                    ]
+                }
+            ]
+        )
+    except Exception as e:
+        return jsonify({"error": f"OpenAI request failed: {str(e)}"}), 500
 
     result_text = response.output_text.strip()
 
