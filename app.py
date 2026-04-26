@@ -5,11 +5,16 @@ from dotenv import load_dotenv
 import base64
 import os
 import json
+import uuid
+from werkzeug.utils import secure_filename
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
+UPLOAD_FOLDER = "/tmp/caption_uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -53,7 +58,7 @@ Brand voice:
 - emotionally intelligent, not cheesy
 - written like an experienced photographer and marketer
 - adjust the wording to reflect the selected tone while staying on-brand
-- avoid trying to sound impressive, keep it natural and direct
+- avoid trying to sound impressive; keep it natural and direct
 - write like a working UK photographer posting on Instagram
 - captions should feel written in the moment, not carefully constructed
 - avoid sounding polished or overly considered
@@ -781,6 +786,43 @@ def preview():
     </body>
     </html>
     """
+
+
+@app.route("/uploaded-image/<filename>")
+def uploaded_image(filename):
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+    if not os.path.exists(file_path):
+        return "Image not found", 404
+
+    return send_file(file_path)
+
+
+@app.route("/upload-preview", methods=["POST"])
+def upload_preview():
+    image = request.files.get("image")
+
+    if not image:
+        return jsonify({"error": "No image uploaded"}), 400
+
+    original_filename = secure_filename(image.filename or "upload.jpg")
+    extension = os.path.splitext(original_filename)[1].lower() or ".jpg"
+
+    if extension not in [".jpg", ".jpeg", ".png", ".webp"]:
+        return jsonify({"error": "Unsupported image type"}), 400
+
+    filename = f"{uuid.uuid4().hex}{extension}"
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    image.save(file_path)
+
+    image_url = f"{request.host_url.rstrip('/')}/uploaded-image/{filename}"
+    page_url = f"https://msands.photography/caption-generator?image_url={image_url}"
+
+    return jsonify({
+        "image_url": image_url,
+        "page_url": page_url
+    })
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
