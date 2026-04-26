@@ -7,6 +7,7 @@ import os
 import json
 import uuid
 import urllib.request
+import urllib.parse
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -346,10 +347,32 @@ def generate():
         base64_image = encode_image(image)
     else:
         try:
-            with urllib.request.urlopen(image_url, timeout=20) as image_response:
-                mime_type = image_response.headers.get("Content-Type", "image/jpeg")
-                image_bytes = image_response.read()
-                base64_image = base64.b64encode(image_bytes).decode("utf-8")
+            parsed_url = urllib.parse.urlparse(image_url)
+            filename = os.path.basename(parsed_url.path)
+
+            if "/uploaded-image/" in parsed_url.path and filename:
+                file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+                if not os.path.exists(file_path):
+                    return jsonify({"error": "Uploaded image file was not found on the server"}), 400
+
+                extension = os.path.splitext(filename)[1].lower()
+                if extension in [".jpg", ".jpeg"]:
+                    mime_type = "image/jpeg"
+                elif extension == ".png":
+                    mime_type = "image/png"
+                elif extension == ".webp":
+                    mime_type = "image/webp"
+                else:
+                    mime_type = "image/jpeg"
+
+                with open(file_path, "rb") as image_file:
+                    base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+            else:
+                with urllib.request.urlopen(image_url, timeout=20) as image_response:
+                    mime_type = image_response.headers.get("Content-Type", "image/jpeg")
+                    image_bytes = image_response.read()
+                    base64_image = base64.b64encode(image_bytes).decode("utf-8")
         except Exception as e:
             return jsonify({"error": f"Could not retrieve image from image_url: {str(e)}"}), 400
 
