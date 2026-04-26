@@ -798,6 +798,7 @@ def uploaded_image(filename):
     return send_file(file_path)
 
 
+
 @app.route("/upload-preview", methods=["POST"])
 def upload_preview():
     image = request.files.get("image")
@@ -814,6 +815,38 @@ def upload_preview():
     filename = f"{uuid.uuid4().hex}{extension}"
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     image.save(file_path)
+
+    image_url = f"{request.host_url.rstrip('/')}/uploaded-image/{filename}"
+    page_url = f"https://msands.photography/caption-generator?image_url={image_url}"
+
+    return jsonify({
+        "image_url": image_url,
+        "page_url": page_url
+    })
+
+
+# New upload-base64 route
+@app.route("/upload-base64", methods=["POST"])
+def upload_base64():
+    data = request.get_json(silent=True) or {}
+    image_base64 = data.get("image", "")
+
+    if not image_base64:
+        return jsonify({"error": "No image provided"}), 400
+
+    try:
+        if "," in image_base64:
+            image_base64 = image_base64.split(",")[-1]
+
+        image_data = base64.b64decode(image_base64)
+    except Exception:
+        return jsonify({"error": "Invalid base64 image"}), 400
+
+    filename = f"{uuid.uuid4().hex}.jpg"
+    file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+    with open(file_path, "wb") as f:
+        f.write(image_data)
 
     image_url = f"{request.host_url.rstrip('/')}/uploaded-image/{filename}"
     page_url = f"https://msands.photography/caption-generator?image_url={image_url}"
