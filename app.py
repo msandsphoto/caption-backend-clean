@@ -327,20 +327,30 @@ def home():
 @app.route("/generate", methods=["POST"])
 def generate():
     image = request.files.get("image")
+    image_url = request.form.get("image_url", "").strip()
     category = request.form.get("category", "").strip().lower()
     subcategory = request.form.get("subcategory", "").strip()
     idea = request.form.get("idea", "").strip()
     tone = request.form.get("tone", "premium").strip().lower()
     goal = request.form.get("goal", "bookings").strip().lower()
 
-    if not image:
-        return jsonify({"error": "No image uploaded"}), 400
+    if not image and not image_url:
+        return jsonify({"error": "No image provided"}), 400
 
     if category not in ["fitness", "model", "mindset"]:
         return jsonify({"error": "Invalid category"}), 400
 
-    mime_type = image.mimetype or "image/jpeg"
-    base64_image = encode_image(image)
+    if image:
+        mime_type = image.mimetype or "image/jpeg"
+        base64_image = encode_image(image)
+    else:
+        try:
+            image_response = client._client.get(image_url)
+            image_response.raise_for_status()
+            mime_type = image_response.headers.get("Content-Type", "image/jpeg")
+            base64_image = base64.b64encode(image_response.content).decode("utf-8")
+        except Exception:
+            return jsonify({"error": "Could not retrieve image from image_url"}), 400
 
     prompt = build_prompt(category, subcategory, idea, tone, goal)
 
