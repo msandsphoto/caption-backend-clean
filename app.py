@@ -793,7 +793,7 @@ def preview():
         </div>
 
         <script>
-        const audienceOptions = {
+        const audienceOptions = {{
             general: [
                 'Image led',
                 'Editorial',
@@ -825,7 +825,7 @@ def preview():
                 'Mindfulness / wellbeing',
                 'Creative reflection'
             ]
-        };
+        }};
 
         function updateAudienceOptions() {{
             const category = document.getElementById('category').value;
@@ -974,6 +974,60 @@ def upload_base64():
     return jsonify({
         "image_url": image_url,
         "page_url": page_url
+    })
+
+
+@app.route("/refine-caption", methods=["POST"])
+def refine_caption():
+    data = request.get_json(silent=True) or {}
+    caption = data.get("caption", "").strip()
+    refine_type = data.get("refine_type", "").strip().lower()
+
+    if not caption:
+        return jsonify({"error": "No caption provided"}), 400
+
+    refine_instructions = {
+        "shorter": "Make this caption shorter and sharper while keeping the same meaning and tone.",
+        "more_editorial": "Make this caption more editorial, restrained, visually aware, and premium. Avoid hype.",
+        "more_commercial": "Make this caption more commercial and brand-aware, but still natural and not salesy.",
+        "stronger_hook": "Keep the caption style, but improve the opening hook so it feels stronger and more scroll-stopping without sounding cheesy.",
+        "less_salesy": "Make this caption less salesy, more natural, and more image-led.",
+        "more_me": "Make this caption sound more like MSands Photography: clean, grounded, direct, premium, believable, and not flowery."
+    }
+
+    instruction = refine_instructions.get(
+        refine_type,
+        "Refine this caption while keeping it clean, natural, premium, and suitable for Instagram."
+    )
+
+    prompt = f"""
+You are refining an Instagram caption for MSands Photography.
+
+Use UK English.
+Keep the writing clean, direct, premium, and natural.
+Do not add emojis.
+Do not over-write it.
+Do not make it sound like a marketing agency.
+Keep hashtags if they are present, but improve them only if needed.
+
+Instruction: {instruction}
+
+Caption to refine:
+{caption}
+
+Return only the refined caption text.
+"""
+
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=prompt
+        )
+    except Exception as e:
+        return jsonify({"error": f"OpenAI request failed: {str(e)}"}), 500
+
+    return jsonify({
+        "caption": response.output_text.strip()
     })
 
 
