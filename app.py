@@ -982,6 +982,7 @@ def refine_caption():
     data = request.get_json(silent=True) or {}
     caption = data.get("caption", "").strip()
     refine_type = data.get("refine_type", "").strip().lower()
+    custom_instruction = data.get("custom_instruction", "").strip()
 
     if not caption:
         return jsonify({"error": "No caption provided"}), 400
@@ -995,10 +996,13 @@ def refine_caption():
         "more_me": "Make this caption sound more like MSands Photography: clean, grounded, direct, premium, believable, and not flowery."
     }
 
-    instruction = refine_instructions.get(
-        refine_type,
-        "Refine this caption while keeping it clean, natural, premium, and suitable for Instagram."
-    )
+    if refine_type == "custom" and custom_instruction:
+        instruction = custom_instruction
+    else:
+        instruction = refine_instructions.get(
+            refine_type,
+            "Refine this caption while keeping it clean, natural, premium, and suitable for Instagram."
+        )
 
     prompt = f"""
 You are refining an Instagram caption for MSands Photography.
