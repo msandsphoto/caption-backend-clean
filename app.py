@@ -988,12 +988,12 @@ def refine_caption():
         return jsonify({"error": "No caption provided"}), 400
 
     refine_instructions = {
-        "shorter": "Make this caption shorter and sharper while keeping the same meaning and tone.",
-        "more_editorial": "Make this caption more editorial, restrained, visually aware, and premium. Avoid hype.",
-        "more_commercial": "Make this caption more commercial and brand-aware, but still natural and not salesy.",
-        "stronger_hook": "Keep the caption style, but improve the opening hook so it feels stronger and more scroll-stopping without sounding cheesy.",
-        "less_salesy": "Make this caption less salesy, more natural, and more image-led.",
-        "more_me": "Make this caption sound more like MSands Photography: clean, grounded, direct, premium, believable, and not flowery."
+        "shorter": "Make this caption clearly shorter. Remove unnecessary words. Keep only the strongest lines.",
+        "more_editorial": "Rewrite this caption so it feels more editorial, restrained, visual, and premium.",
+        "more_commercial": "Rewrite this caption so it feels more commercial and brand-aware, but still natural and not salesy.",
+        "stronger_hook": "Rewrite the opening hook so it is stronger and more direct. Keep the rest clean and natural.",
+        "less_salesy": "Rewrite this caption so it feels less salesy, more natural, and more image-led.",
+        "more_me": "Rewrite this caption so it sounds more like MSands Photography: clean, grounded, direct, premium, believable, and not flowery."
     }
 
     if refine_type == "custom" and custom_instruction:
@@ -1001,22 +1001,28 @@ def refine_caption():
     else:
         instruction = refine_instructions.get(
             refine_type,
-            "Refine this caption while keeping it clean, natural, premium, and suitable for Instagram."
+            "Rewrite this caption while keeping it clean, natural, premium, and suitable for Instagram."
         )
 
     prompt = f"""
 You are refining an Instagram caption for MSands Photography.
 
 Use UK English.
-Keep the writing clean, direct, premium, and natural.
+You MUST rewrite the caption.
+Do NOT return the original caption unchanged.
+The refined version must be noticeably different from the original.
+Keep the same broad meaning, but improve the wording, rhythm, and structure.
+Keep it clean, direct, premium, and natural.
 Do not add emojis.
-Do not over-write it.
 Do not make it sound like a marketing agency.
-Keep hashtags if they are present, but improve them only if needed.
+Do not over-write it.
+Preserve line breaks where useful.
+Keep hashtags if present, but improve them only if needed.
 
-Instruction: {instruction}
+Refine instruction:
+{instruction}
 
-Caption to refine:
+Original caption:
 {caption}
 
 Return only the refined caption text.
@@ -1030,10 +1036,14 @@ Return only the refined caption text.
     except Exception as e:
         return jsonify({"error": f"OpenAI request failed: {str(e)}"}), 500
 
-    return jsonify({
-        "caption": response.output_text.strip()
-    })
+    refined = response.output_text.strip()
 
+    if refined == caption:
+        refined = caption + "\n\n[Refine did not change the caption — try a stronger custom instruction.]"
+
+    return jsonify({
+        "caption": refined
+    })
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
