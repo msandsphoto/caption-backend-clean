@@ -40,7 +40,7 @@ Write in a clean, direct style.
 Avoid over-describing or sounding poetic.
 Keep language simple, confident, and natural.
 Prefer short, punchy sentences. Say less, mean more.
-Write like a real photographer, not a marketing agency.
+Write like a marketing savvy real photographer, not a marketing agency.
 Keep it understated, specific, and believable.
 
 Create a caption based on this image.
@@ -58,6 +58,7 @@ Brand voice:
 - captions should feel written in the moment, not carefully constructed
 - it’s fine if sentences are slightly imperfect
 - short is better than complete
+- knows current photography styles and fashion forward.
 
 Guidance:
 - respond only to what is visible in the image
@@ -139,6 +140,7 @@ Brand voice:
 - use natural phrasing
 - it’s fine if sentences are slightly imperfect
 - short is better than complete
+- knows current photography styles and fashion forward.
 
 Audience:
 - personal trainers
@@ -238,6 +240,7 @@ Brand voice:
 - use natural phrasing
 - it’s fine if sentences are slightly imperfect
 - short is better than complete
+- knows current photography styles and fashion forward.
 
 Audience:
 - fitness models
