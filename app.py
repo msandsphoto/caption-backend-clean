@@ -893,6 +893,71 @@ def upload_base64():
         "page_url": page_url
     })
 
+@app.route("/refine-caption", methods=["POST"])
+def refine_caption():
+    data = request.get_json(silent=True) or {}
+    caption = data.get("caption", "").strip()
+    refine_type = data.get("refine_type", "").strip().lower()
+    custom_instruction = data.get("custom_instruction", "").strip()
+
+    if not caption:
+        return jsonify({"error": "No caption provided"}), 400
+
+    refine_instructions = {
+        "shorter": "Make this caption clearly shorter. Remove unnecessary words. Keep only the strongest lines.",
+        "more_editorial": "Rewrite this caption so it feels more editorial, restrained, visual, and premium.",
+        "more_commercial": "Rewrite this caption so it feels more commercial and brand-aware, but still natural and not salesy.",
+        "stronger_hook": "Rewrite the opening hook so it is stronger and more direct. Keep the rest clean and natural.",
+        "less_salesy": "Rewrite this caption so it feels less salesy, more natural, and more image-led.",
+        "more_me": "Rewrite this caption so it sounds more like MSands Photography: clean, grounded, direct, premium, believable, and not flowery."
+    }
+
+    if refine_type == "custom" and custom_instruction:
+        instruction = custom_instruction
+    else:
+        instruction = refine_instructions.get(
+            refine_type,
+            "Rewrite this caption while keeping it clean, natural, premium, and suitable for Instagram."
+        )
+
+    prompt = f"""
+You are refining an Instagram caption for MSands Photography.
+
+Use UK English.
+You MUST rewrite the caption.
+Do NOT return the original caption unchanged.
+The refined version must be noticeably different from the original.
+Keep the same broad meaning, but improve the wording, rhythm, and structure.
+Keep it clean, direct, premium, and natural.
+Do not add emojis.
+Do not make it sound like a marketing agency.
+Do not over-write it.
+Preserve line breaks where useful.
+Keep hashtags if present, but improve them only if needed.
+
+Refine instruction:
+{instruction}
+
+Original caption:
+{caption}
+
+Return only the refined caption text.
+"""
+
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=prompt
+        )
+    except Exception as e:
+        return jsonify({"error": f"OpenAI request failed: {str(e)}"}), 500
+
+    refined = response.output_text.strip()
+
+    if refined == caption:
+        refined = caption + "\n\n[Refine did not change the caption — try a stronger custom instruction.]"
+
+    return jsonify({"caption": refined})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
