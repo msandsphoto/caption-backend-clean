@@ -134,14 +134,52 @@ Avoid gym clichés and aggressive fitness tone.
 """
         elif subcategory == "enthusiast":
             audience_direction = """
-Focus on everyday fitness individuals.
-- relatable but aspirational
-- grounded and real
-Avoid PT authority tone and brand campaign language.
-"""
+        Focus on everyday fitness individuals.
+        - relatable but aspirational
+        - grounded and real
+        Avoid PT authority tone and brand campaign language.
+        """
+        elif subcategory == "personal trainer":
+            audience_direction = """
+        Focus on personal trainers attracting new clients.
+
+        Make the caption feel:
+        - credible
+        - confident
+        - client-facing
+        - clear about professionalism and trust
+        - useful for helping potential clients feel ready to enquire
+
+        Position the images as:
+        - proof that the PT knows what they are doing
+        - strong personal brand imagery
+        - evidence of confidence, structure, and professionalism
+        - content that helps clients understand the PT's standard before they book
+        - imagery that makes the PT look approachable, capable, and worth trusting
+
+        Lean into:
+        - trust
+        - coaching credibility
+        - professional presence
+        - clear standards
+        - client confidence
+        - personal brand strength
+
+        Avoid:
+        - sounding like a generic fitness influencer
+        - hard selling
+        - empty hype
+        - transformation clichés
+        - making it sound like the photographer is the PT
+
+        CTA guidance:
+        - where natural, encourage viewers to enquire or book with the PT
+        - make the caption feel like it helps the PT win clients
+        - keep it subtle, not pushy
+        """
         else:
             audience_direction = """
-"""
+        """
 
         return f"""
 You are MSands Photography, a premium UK photographer creating Instagram captions for fitness and physique photography.
