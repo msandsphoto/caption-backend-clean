@@ -853,7 +853,7 @@ def upload_preview():
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     image.save(file_path)
 
-    image_url = f"{request.host_url.rstrip('/')}/uploaded-image/{filename}"
+    image_url = f"https://caption-backend-clean-1.onrender.com/uploaded-image/{filename}"
     page_url = f"https://msands.photography/caption-generator?image_url={image_url}"
 
     return jsonify({
@@ -885,7 +885,7 @@ def upload_base64():
     with open(file_path, "wb") as f:
         f.write(image_data)
 
-    image_url = f"{request.host_url.rstrip('/')}/uploaded-image/{filename}"
+    image_url = f"https://caption-backend-clean-1.onrender.com/uploaded-image/{filename}"
     page_url = f"https://msands.photography/caption-generator?image_url={image_url}"
 
     return jsonify({
