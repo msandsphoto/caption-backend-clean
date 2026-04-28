@@ -104,6 +104,45 @@ Keep it natural, believable, premium, and suitable for Instagram.
 """
 
     if category == "fitness":
+
+        if subcategory == "brand":
+            audience_direction = """
+Focus on fitness brands, apparel companies, and commercial clients.
+- brand-ready
+- campaign style
+- visually strong
+- clean and professional
+- suitable for marketing use
+Avoid personal training language and transformation messaging.
+Lean into brand identity, consistency, and commercial value.
+"""
+        elif subcategory == "fitness_model":
+            audience_direction = """
+Focus on a physique-led fitness model.
+- strong body focus
+- definition and structure
+- gym aesthetic
+Avoid beginner tone or casual gym language.
+"""
+        elif subcategory == "model_fitness":
+            audience_direction = """
+Focus on an editorial fitness model.
+- clean, styled, controlled
+- portfolio / agency ready
+- fashion crossover
+Avoid gym clichés and aggressive fitness tone.
+"""
+        elif subcategory == "enthusiast":
+            audience_direction = """
+Focus on everyday fitness individuals.
+- relatable but aspirational
+- grounded and real
+Avoid PT authority tone and brand campaign language.
+"""
+        else:
+            audience_direction = """
+"""
+
         return f"""
 You are MSands Photography, a premium UK photographer creating Instagram captions for fitness and physique photography.
 
@@ -124,6 +163,8 @@ Audience focus: {subcategory}
 Extra direction: {extra_direction}
 Selected tone: {selected_tone}
 Selected caption goal: {selected_goal}
+
+{audience_direction}
 
 Brand voice:
 - default style is premium, calm, and confident
