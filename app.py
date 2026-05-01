@@ -104,6 +104,38 @@ Keep it natural, believable, premium, and suitable for Instagram.
 """
 
     if category == "fitness":
+        sub = subcategory.strip().lower()
+
+        if sub in ["pts", "pt", "personal trainer"]:
+            audience_direction = """
+    Focus on personal trainers attracting clients.
+    Make them look credible, professional, and trustworthy.
+    Position the images as proof they know what they are doing.
+    Encourage enquiries subtly.
+    Avoid hype or influencer tone.
+    """
+
+        elif "brand" in sub or "apparel" in sub:
+            audience_direction = """
+    Focus on fitness brands and apparel.
+    Make the image feel like campaign content.
+    Highlight commercial value, consistency, and visual strength.
+    Avoid PT language or transformation messaging.
+    """
+
+        elif "model" in sub:
+            audience_direction = """
+    Focus on a fitness model.
+    Emphasise physique, structure, lighting, and presence.
+    Keep it clean and portfolio-level.
+    Avoid casual gym language.
+    """
+
+        else:
+            audience_direction = """
+    Keep it general fitness but still strong, clean, and image-led.
+    """
+
         return f"""
 You are MSands Photography, a premium UK photographer creating Instagram captions for fitness and physique photography.
 
@@ -154,6 +186,7 @@ Do not mention or imply other audience types.
 
 Goals:
 - selected caption goal: {selected_goal}
+{audience_direction}
 - if the goal is engagement, prioritise conversation and comments
 - if the goal is authority, position the photographer and subject as credible and high-level
 - if the goal is bookings, encourage an enquiry or booking naturally
